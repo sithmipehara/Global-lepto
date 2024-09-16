@@ -144,24 +144,24 @@ if(selected_region=='Europe'):
 
     # Filter data for the selected year
     year_bar_data = df_long[df_long['Year'] == selected_year]
-     with col1:
-         # Plotting the cases for each country
-         fig, ax = plt.subplots(figsize=(10, 6))
-         fig.patch.set_facecolor('black') 
-         ax.set_facecolor('black')
-         year_bar_data_sorted = year_bar_data.sort_values(by='Cases', ascending=False)
+    with col1:
+        # Plotting the cases for each country
+        fig, ax = plt.subplots(figsize=(10, 6))
+        fig.patch.set_facecolor('black') 
+        ax.set_facecolor('black')
+        year_bar_data_sorted = year_bar_data.sort_values(by='Cases', ascending=False)
 
-         ax.barh(year_bar_data_sorted['Region'], year_bar_data_sorted['Cases'], color='aquamarine')
-         ax.set_xlabel('Number of Cases').set_color('white')
-         ax.set_ylabel('Country').set_color('white')
-         ax.set_title(f'Leptospirosis Cases by Country in {selected_year}').set_color('white')
-         ax.grid(True,alpha=0.1)
-         ax.tick_params(axis='x', colors='white')  # Change x-axis tick color
-         ax.tick_params(axis='y', colors='white')
+        ax.barh(year_bar_data_sorted['Region'], year_bar_data_sorted['Cases'], color='aquamarine')
+        ax.set_xlabel('Number of Cases').set_color('white')
+        ax.set_ylabel('Country').set_color('white')
+        ax.set_title(f'Leptospirosis Cases by Country in {selected_year}').set_color('white')
+        ax.grid(True,alpha=0.1)
+        ax.tick_params(axis='x', colors='white')  # Change x-axis tick color
+        ax.tick_params(axis='y', colors='white')
 
-         # Display the bar plot
-         st.pyplot(fig)
-    import plotly.graph_objects as go
+        # Display the bar plot
+        st.pyplot(fig)
+        import plotly.graph_objects as go
     with col1:
         year_bar_data_sorted = year_bar_data.sort_values(by='Cases', ascending=False)
 
