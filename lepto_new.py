@@ -128,13 +128,13 @@ if(selected_region=='Europe'):
         zoom=1,
         pitch=50
     )
-    # def lstm_model(trainX, trainY):
-    #     model = Sequential()
-    #     model.add(LSTM(50, return_sequences=True, input_shape=(trainX.shape[1], 1)))
-    #     model.add(LSTM(50))
-    #     model.add(Dense(1))
-    #     model.compile(optimizer='adam', loss='mean_squared_error')
-    #     return model
+     def lstm_model(trainX, trainY):
+         model = Sequential()
+         model.add(LSTM(50, return_sequences=True, input_shape=(trainX.shape[1], 1)))
+         model.add(LSTM(50))
+         model.add(Dense(1))
+         model.compile(optimizer='adam', loss='mean_squared_error')
+         return model
 
     # Render the map in the second column
     with col1:
@@ -144,23 +144,23 @@ if(selected_region=='Europe'):
 
     # Filter data for the selected year
     year_bar_data = df_long[df_long['Year'] == selected_year]
-    # with col1:
-    #     # Plotting the cases for each country
-    #     fig, ax = plt.subplots(figsize=(10, 6))
-    #     fig.patch.set_facecolor('black') 
-    #     ax.set_facecolor('black')
-    #     year_bar_data_sorted = year_bar_data.sort_values(by='Cases', ascending=False)
+     with col1:
+         # Plotting the cases for each country
+         fig, ax = plt.subplots(figsize=(10, 6))
+         fig.patch.set_facecolor('black') 
+         ax.set_facecolor('black')
+         year_bar_data_sorted = year_bar_data.sort_values(by='Cases', ascending=False)
 
-    #     ax.barh(year_bar_data_sorted['Region'], year_bar_data_sorted['Cases'], color='aquamarine')
-    #     ax.set_xlabel('Number of Cases').set_color('white')
-    #     ax.set_ylabel('Country').set_color('white')
-    #     ax.set_title(f'Leptospirosis Cases by Country in {selected_year}').set_color('white')
-    #     ax.grid(True,alpha=0.1)
-    #     ax.tick_params(axis='x', colors='white')  # Change x-axis tick color
-    #     ax.tick_params(axis='y', colors='white')
+         ax.barh(year_bar_data_sorted['Region'], year_bar_data_sorted['Cases'], color='aquamarine')
+         ax.set_xlabel('Number of Cases').set_color('white')
+         ax.set_ylabel('Country').set_color('white')
+         ax.set_title(f'Leptospirosis Cases by Country in {selected_year}').set_color('white')
+         ax.grid(True,alpha=0.1)
+         ax.tick_params(axis='x', colors='white')  # Change x-axis tick color
+         ax.tick_params(axis='y', colors='white')
 
-    #     # Display the bar plot
-    #     st.pyplot(fig)
+         # Display the bar plot
+         st.pyplot(fig)
     import plotly.graph_objects as go
     with col1:
         year_bar_data_sorted = year_bar_data.sort_values(by='Cases', ascending=False)
@@ -248,16 +248,16 @@ if(selected_region=='Europe'):
                  input_data = np.append(input_data[:, 1:, :], prediction.reshape(1, 1, 1), axis=1)
 
              future_years = np.array([year for year in range(2023, 2028)])
-             # plt.figure(figsize=(12, 6))
-             # plt.plot(country_data['Year'], country_data['Cases'], label='Actual Cases', color='green')
-             # plt.plot(country_data['Year'][:len(lstm_predictions)], lstm_predictions, label='Training Predictions', color='blue')
-             # plt.plot(country_data['Year'][len(lstm_predictions):len(lstm_predictions) + len(lstm_test_predictions)], lstm_test_predictions, label='Test Predictions', color='orange')
-             # plt.plot(future_years, future_cases, label='Future Predictions', color='red', marker='o')
-             # plt.xlabel('Year')
-             # plt.ylabel('Cases')
-             # plt.title('LSTM Predictions vs Actual Data')
-             # plt.legend()
-             # plt.show()
+             plt.figure(figsize=(12, 6))
+             plt.plot(country_data['Year'], country_data['Cases'], label='Actual Cases', color='green')
+             plt.plot(country_data['Year'][:len(lstm_predictions)], lstm_predictions, label='Training Predictions', color='blue')
+             plt.plot(country_data['Year'][len(lstm_predictions):len(lstm_predictions) + len(lstm_test_predictions)], lstm_test_predictions, label='Test Predictions', color='orange')
+             plt.plot(future_years, future_cases, label='Future Predictions', color='red', marker='o')
+             plt.xlabel('Year')
+             plt.ylabel('Cases')
+             plt.title('LSTM Predictions vs Actual Data')
+             plt.legend()
+             plt.show()
              # --- Linear Regression ---
              lr_model = LinearRegression()
              lr_model.fit(X_train, y_train)
