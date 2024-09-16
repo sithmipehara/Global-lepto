@@ -193,125 +193,125 @@ if(selected_region=='Europe'):
     from sklearn.model_selection import train_test_split
 
     # # Forecasting button
-    # if st.button('Generate Forecast'):
-    #     if len(country_data) < 2:
-    #         st.warning("Not enough data to perform forecasting for this country.")
-    #     else:
-    #         # Prepare data for forecasting
-    #         X = country_data['Year'].values.reshape(-1, 1)  # Features (Years)
-    #         y = country_data['Cases'].values  # Target (Cases)
-    #         # st.write(X)
-    #         # st.write(y)
-    #         # Train-Test Split
-    #         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
+    if st.button('Generate Forecast'):
+         if len(country_data) < 2:
+             st.warning("Not enough data to perform forecasting for this country.")
+         else:
+             # Prepare data for forecasting
+             X = country_data['Year'].values.reshape(-1, 1)  # Features (Years)
+             y = country_data['Cases'].values  # Target (Cases)
+              st.write(X)
+              st.write(y)
+              Train-Test Split
+             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
-    #         # Scaling
-    #         scaler = MinMaxScaler(feature_range=(0, 1))
-    #         scaled_train_y = scaler.fit_transform(y_train.reshape(-1, 1))
-    #         scaled_test_y = scaler.transform(y_test.reshape(-1, 1))
+             # Scaling
+             scaler = MinMaxScaler(feature_range=(0, 1))
+             scaled_train_y = scaler.fit_transform(y_train.reshape(-1, 1))
+             scaled_test_y = scaler.transform(y_test.reshape(-1, 1))
 
-    #         # Prepare data for LSTM
-    #         def create_lstm_dataset(data, time_step=1):
-    #             X, Y = [], []
-    #             for i in range(len(data) - time_step):
-    #                 X.append(data[i:(i + time_step), 0])
-    #                 Y.append(data[i + time_step, 0])
-    #             return np.array(X), np.array(Y)
+             # Prepare data for LSTM
+             def create_lstm_dataset(data, time_step=1):
+                 X, Y = [], []
+                 for i in range(len(data) - time_step):
+                     X.append(data[i:(i + time_step), 0])
+                     Y.append(data[i + time_step, 0])
+                 return np.array(X), np.array(Y)
 
-    #         time_step = 3
-    #         trainX, trainY = create_lstm_dataset(scaled_train_y, time_step)
+             time_step = 3
+             trainX, trainY = create_lstm_dataset(scaled_train_y, time_step)
 
-    #         # Reshaping for LSTM input (samples, time steps, features)
-    #         trainX = np.reshape(trainX, (trainX.shape[0], trainX.shape[1], 1))
+             # Reshaping for LSTM input (samples, time steps, features)
+             trainX = np.reshape(trainX, (trainX.shape[0], trainX.shape[1], 1))
 
-    #         # Create and fit the LSTM model
-    #         lstm = lstm_model(trainX,trainY)
-    #         lstm.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
+             # Create and fit the LSTM model
+             lstm = lstm_model(trainX,trainY)
+             lstm.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
 
-    #         # Make predictions
-    #         lstm_predictions = lstm.predict(trainX)
-    #         lstm_predictions = scaler.inverse_transform(lstm_predictions)  # Rescale back to original values
-    #         # Prepare test data for LSTM
-    #         testX, testY = create_lstm_dataset(scaled_test_y, time_step)
-    #         testX = np.reshape(testX, (testX.shape[0], testX.shape[1], 1))
-    #     # Make predictions on the test set
-    #         lstm_test_predictions = lstm.predict(testX)
-    #         lstm_test_predictions = scaler.inverse_transform(lstm_test_predictions)  
-    #         # Modify the LSTM prediction loop
-    #         future_cases = []
-    #         input_data = scaled_train_y[-time_step:].reshape(1, time_step, 1)  # Reshape to 3D
+             # Make predictions
+             lstm_predictions = lstm.predict(trainX)
+             lstm_predictions = scaler.inverse_transform(lstm_predictions)  # Rescale back to original values
+             # Prepare test data for LSTM
+             testX, testY = create_lstm_dataset(scaled_test_y, time_step)
+             testX = np.reshape(testX, (testX.shape[0], testX.shape[1], 1))
+         # Make predictions on the test set
+             lstm_test_predictions = lstm.predict(testX)
+             lstm_test_predictions = scaler.inverse_transform(lstm_test_predictions)  
+             # Modify the LSTM prediction loop
+             future_cases = []
+             input_data = scaled_train_y[-time_step:].reshape(1, time_step, 1)  # Reshape to 3D
 
-    #         for i in range(5):  # Forecasting the next 5 years
-    #             prediction = lstm.predict(input_data)  # Predict using the reshaped input
-    #             future_cases.append(scaler.inverse_transform(prediction)[0][0])  # Append the predicted value
-    #             # Append the prediction to input_data and reshape it for the next step
-    #             input_data = np.append(input_data[:, 1:, :], prediction.reshape(1, 1, 1), axis=1)
+             for i in range(5):  # Forecasting the next 5 years
+                 prediction = lstm.predict(input_data)  # Predict using the reshaped input
+                 future_cases.append(scaler.inverse_transform(prediction)[0][0])  # Append the predicted value
+                 # Append the prediction to input_data and reshape it for the next step
+                 input_data = np.append(input_data[:, 1:, :], prediction.reshape(1, 1, 1), axis=1)
 
-    #         future_years = np.array([year for year in range(2023, 2028)])
-    #         # plt.figure(figsize=(12, 6))
-    #         # plt.plot(country_data['Year'], country_data['Cases'], label='Actual Cases', color='green')
-    #         # plt.plot(country_data['Year'][:len(lstm_predictions)], lstm_predictions, label='Training Predictions', color='blue')
-    #         # plt.plot(country_data['Year'][len(lstm_predictions):len(lstm_predictions) + len(lstm_test_predictions)], lstm_test_predictions, label='Test Predictions', color='orange')
-    #         # plt.plot(future_years, future_cases, label='Future Predictions', color='red', marker='o')
-    #         # plt.xlabel('Year')
-    #         # plt.ylabel('Cases')
-    #         # plt.title('LSTM Predictions vs Actual Data')
-    #         # plt.legend()
-    #         # plt.show()
-    #         # --- Linear Regression ---
-    #         lr_model = LinearRegression()
-    #         lr_model.fit(X_train, y_train)
-    #         lr_predictions = lr_model.predict(X_test)  # Test predictions
-    #         lr_future_years = np.array([[year] for year in range(2023, 2028)])
-    #         lr_forecast = lr_model.predict(lr_future_years)
-    #         lr_mae = mean_absolute_error(y_test, lr_predictions)
+             future_years = np.array([year for year in range(2023, 2028)])
+             # plt.figure(figsize=(12, 6))
+             # plt.plot(country_data['Year'], country_data['Cases'], label='Actual Cases', color='green')
+             # plt.plot(country_data['Year'][:len(lstm_predictions)], lstm_predictions, label='Training Predictions', color='blue')
+             # plt.plot(country_data['Year'][len(lstm_predictions):len(lstm_predictions) + len(lstm_test_predictions)], lstm_test_predictions, label='Test Predictions', color='orange')
+             # plt.plot(future_years, future_cases, label='Future Predictions', color='red', marker='o')
+             # plt.xlabel('Year')
+             # plt.ylabel('Cases')
+             # plt.title('LSTM Predictions vs Actual Data')
+             # plt.legend()
+             # plt.show()
+             # --- Linear Regression ---
+             lr_model = LinearRegression()
+             lr_model.fit(X_train, y_train)
+             lr_predictions = lr_model.predict(X_test)  # Test predictions
+             lr_future_years = np.array([[year] for year in range(2023, 2028)])
+             lr_forecast = lr_model.predict(lr_future_years)
+             lr_mae = mean_absolute_error(y_test, lr_predictions)
 
-    #         arima_model = ARIMA(y_train, order=(1, 1, 1))  # Example order, adjust as necessary
-    #         arima_model_fit = arima_model.fit()
-    #         arima_forecast = arima_model_fit.forecast(steps=5)
-    #         arima_in_sample_predictions = arima_model_fit.predict(start=0, end=len(y_train)-1, dynamic=False)
-    #         arima_mae = mean_absolute_error(y_train, arima_in_sample_predictions)
-    #         arima_mse = mean_squared_error(y_train, arima_in_sample_predictions)
-    #         arima_rmse = np.sqrt(arima_mse)
+             arima_model = ARIMA(y_train, order=(1, 1, 1))  # Example order, adjust as necessary
+             arima_model_fit = arima_model.fit()
+             arima_forecast = arima_model_fit.forecast(steps=5)
+             arima_in_sample_predictions = arima_model_fit.predict(start=0, end=len(y_train)-1, dynamic=False)
+             arima_mae = mean_absolute_error(y_train, arima_in_sample_predictions)
+             arima_mse = mean_squared_error(y_train, arima_in_sample_predictions)
+             arima_rmse = np.sqrt(arima_mse)
 
-    #         # Create a DataFrame for the forecasted values
-    #         forecast_df = pd.DataFrame({
-    #             'Year': lr_future_years.flatten(),
-    #             'Linear Regression': lr_forecast,
-    #             'ARIMA': arima_forecast,
-    #             'LSTM Forecast': future_cases
-    #         })
+             # Create a DataFrame for the forecasted values
+             forecast_df = pd.DataFrame({
+                 'Year': lr_future_years.flatten(),
+                 'Linear Regression': lr_forecast,
+                 'ARIMA': arima_forecast,
+                 'LSTM Forecast': future_cases
+             })
 
-    #         # Display the forecasted values in a table
-    #         st.subheader('Forecasted Leptospirosis Cases')
-    #         st.table(forecast_df)
+             # Display the forecasted values in a table
+             st.subheader('Forecasted Leptospirosis Cases')
+             st.table(forecast_df)
 
-    #         # Display the Mean Absolute Error for each model
-    #         st.subheader('Model Accuracy')
-    #         st.write(f'Linear Regression MAE: {lr_mae:.2f}')
-    #         st.write(f'ARIMA MAE: {arima_mae:.2f}')
+             # Display the Mean Absolute Error for each model
+             st.subheader('Model Accuracy')
+             st.write(f'Linear Regression MAE: {lr_mae:.2f}')
+             st.write(f'ARIMA MAE: {arima_mae:.2f}')
             
-    #         with col1:
-    #             fig, ax = plt.subplots()
-    #             ax.plot(country_data['Year'], country_data['Cases'], marker='o', linestyle='-', color='b', label='Historical Cases')
-    #             ax.plot(forecast_df['Year'], forecast_df['LSTM Forecast'], marker='o', linestyle='--', color='orange', label='LSTM Forecast')
-    #             ax.plot(forecast_df['Year'], forecast_df['Linear Regression'], marker='o', linestyle='--', color='r', label='LR Forecast')
-    #             ax.plot(forecast_df['Year'], forecast_df['ARIMA'], marker='o', linestyle='--', color='green', label='ARIMA Forecast')
+             with col1:
+                 fig, ax = plt.subplots()
+                 ax.plot(country_data['Year'], country_data['Cases'], marker='o', linestyle='-', color='b', label='Historical Cases')
+                 ax.plot(forecast_df['Year'], forecast_df['LSTM Forecast'], marker='o', linestyle='--', color='orange', label='LSTM Forecast')
+                 ax.plot(forecast_df['Year'], forecast_df['Linear Regression'], marker='o', linestyle='--', color='r', label='LR Forecast')
+                 ax.plot(forecast_df['Year'], forecast_df['ARIMA'], marker='o', linestyle='--', color='green', label='ARIMA Forecast')
                 
-    #             # Set the title and labels
-    #             ax.set_title(f'Leptospirosis Cases in {country} (2007-2027)')
-    #             ax.set_xlabel('Year')
-    #             ax.set_ylabel('Number of Cases')
-    #             ax.grid(True)
-    #             ax.legend()
+                 # Set the title and labels
+                 ax.set_title(f'Leptospirosis Cases in {country} (2007-2027)')
+                 ax.set_xlabel('Year')
+                 ax.set_ylabel('Number of Cases')
+                 ax.grid(True)
+                 ax.legend()
 
-    #             # Set x-ticks to be integers
-    #             ax.set_xticks(np.arange(2007, 2028))  # Set ticks from 2007 to 2027
-    #             ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: int(x)))  # Format ticks as integers
-    #             plt.xticks(rotation=90)  # Rotate x-axis labels
+                 # Set x-ticks to be integers
+                 ax.set_xticks(np.arange(2007, 2028))  # Set ticks from 2007 to 2027
+                 ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: int(x)))  # Format ticks as integers
+                 plt.xticks(rotation=90)  # Rotate x-axis labels
 
-    #             # Display the plot
-    #             st.pyplot(fig)
+                 # Display the plot
+                 st.pyplot(fig)
             
 elif(selected_region=='USA'):
     dfusa=pd.read_csv("america_coord.csv")
