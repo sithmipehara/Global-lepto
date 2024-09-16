@@ -200,9 +200,9 @@ if(selected_region=='Europe'):
              # Prepare data for forecasting
              X = country_data['Year'].values.reshape(-1, 1)  # Features (Years)
              y = country_data['Cases'].values  # Target (Cases)
-              st.write(X)
-              st.write(y)
-              Train-Test Split
+             st.write(X)
+             st.write(y)
+             #Train-Test Split
              X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
              # Scaling
