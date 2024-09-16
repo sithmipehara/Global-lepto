@@ -9,9 +9,9 @@ from xgboost import XGBRegressor
 from statsmodels.tsa.arima.model import ARIMA
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
-#import tensorflow as tf
-# from tf.keras.models import Sequential
-# from tf.keras.layers import LSTM, Dense
+import tensorflow as tf
+from tf.keras.models import Sequential
+from tf.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 # Page config
 st.set_page_config(
