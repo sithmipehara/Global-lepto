@@ -128,13 +128,13 @@ if(selected_region=='Europe'):
         zoom=1,
         pitch=50
     )
-     def lstm_model(trainX, trainY):
-         model = Sequential()
-         model.add(LSTM(50, return_sequences=True, input_shape=(trainX.shape[1], 1)))
-         model.add(LSTM(50))
-         model.add(Dense(1))
-         model.compile(optimizer='adam', loss='mean_squared_error')
-         return model
+    def lstm_model(trainX, trainY):
+        model = Sequential()
+        model.add(LSTM(50, return_sequences=True, input_shape=(trainX.shape[1], 1)))
+        model.add(LSTM(50))
+        model.add(Dense(1))
+        model.compile(optimizer='adam', loss='mean_squared_error')
+        return model
 
     # Render the map in the second column
     with col1:
