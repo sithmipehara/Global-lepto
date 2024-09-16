@@ -1,0 +1,9 @@
+streamlit
+pandas
+pydeck
+numpy
+matplotlib
+scikit-learn
+xgboost
+statsmodels
+tensorflow
