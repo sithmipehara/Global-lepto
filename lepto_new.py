@@ -13,6 +13,10 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
+import altair as alt
+
+alt.themes.enable("dark")
+
 # Page config
 st.set_page_config(
     page_title="Global Leptospirosis Cases",
